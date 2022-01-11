@@ -132,6 +132,8 @@ const KomodoSendEvents = {
   relayUpdate: "relayUpdate",
   notifyBump: "bump",
   rejectUser: "rejectUser",
+  captureStarted: "captureStarted",
+  captureEnded: "captureEnded",
 };
 
 const KomodoMessages = {
@@ -2878,10 +2880,16 @@ module.exports = {
       // session capture handler
       socket.on(KomodoReceiveEvents.start_recording, function (session_id) {
         self.start_recording(pool, session_id);
+
+        // send captureStarted event to everyone in the room except the client who started the capture
+        socket.to(session_id.toString()).emit(KomodoSendEvents.captureStarted);
       });
 
       socket.on(KomodoReceiveEvents.end_recording, function (session_id) {
         self.end_recording(pool, session_id);
+
+        // send captureEnded event to everyone in the room except the client who ended the capture
+        socket.to(session_id.toString()).emit(KomodoSendEvents.captureEnded);
       });
 
       socket.on(KomodoReceiveEvents.playback, function (data) {
