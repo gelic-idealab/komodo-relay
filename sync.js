@@ -396,7 +396,7 @@ module.exports = {
           session.recordingStart,
           "data.json"
         ); // [capturesDirectoryHere]/[session_id_here]/[session.recordingStartHere]/data.json
-        fs.writeFile(path, JSON.stringify(session.message_buffer), (e) => {
+        fs.writeFile(path, JSON.stringify(session.message_buffer, null, "\t"), (e) => {
           if (e) {
             console.log(`Error writing message buffer: ${e}`);
           }
